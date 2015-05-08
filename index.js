@@ -1,6 +1,6 @@
 'use strict';
 
-var config = require('./package.json')
+var config = require('./config.js')
   , Gorgon = require('./gorgon')
   , express = require('express')
   , Primus = require('primus')
