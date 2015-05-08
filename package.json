@@ -1,0 +1,31 @@
+{
+  "name": "gorgon.exchange",
+  "version": "1.0.0",
+  "description": "The site that runs gorgon.exchange",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "gorgon",
+    "exchange",
+    "chest"
+  ],
+  "author": "Arnout Kazemier",
+  "license": "MIT",
+  "dependencies": {
+    "connected": "0.0.x",
+    "ejs": "2.3.x",
+    "emits": "3.0.x",
+    "eventemitter3": "1.0.x",
+    "expirable": "0.1.x",
+    "express": "4.12.x",
+    "one-time": "0.0.x",
+    "primus": "3.0.x",
+    "primus-emit": "0.1.x",
+    "react": "0.13.x",
+    "serve-static": "1.9.x",
+    "snoocore": "3.0.x",
+    "ws": "0.7.x"
+  }
+}
