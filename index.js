@@ -53,7 +53,7 @@ app.get('/gee/:flair', function api(req, res) {
   res.set('Content-Type', 'application/json');
 
   res.status(200).send(gee.data.filter(function filter(row) {
-    return (row.link_flair_text || '').toLowerCase() === req.params.flair;
+    return (row.platform || '').toLowerCase() === req.params.flair;
   }));
 });
 
