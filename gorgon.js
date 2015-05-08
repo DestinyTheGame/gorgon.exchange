@@ -111,6 +111,8 @@ Gorgon.prototype.update = function update(yay, nay) {
       })) return false;
 
       return true;
+    }).map(function normalize(row) {
+      return gorgon.normalize(row);
     });
 
     //
@@ -121,6 +123,27 @@ Gorgon.prototype.update = function update(yay, nay) {
 
     console.log('updating with %d rows', rows.length);
   }).catch(nay);
+};
+
+/**
+ * Normalize the returned data to a clean and useful structure.
+ *
+ * @param {Object} row The received row from the Reddit server.
+ * @returns {Object} Brand spanking new, clean object.
+ * @api private
+ */
+Gorgon.prototype.normalize = function normalize(row) {
+  return {
+    title: row.title.replace(/^\[[^\]]+?\]/, '').trim(),
+    created: new Date(row.created * 1000),
+    modified: new Date(row.edited * 1000),
+    platform: row.link_flair_text,
+    author: row.author,
+    text: row.selftext,
+    score: row.score,
+    _id: row.id,
+    url: row.url
+  };
 };
 
 //
