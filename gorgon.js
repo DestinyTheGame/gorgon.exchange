@@ -3,7 +3,7 @@
 var one = require('one-time')
   , Snoocore = require('snoocore')
   , EventEmitter = require('eventemitter3')
-  , reddit = new Snoocore(require('./package.json'));
+  , reddit = new Snoocore(require('./config'));
 
 /**
  * Gorgon Exchange Emitter (GEE).

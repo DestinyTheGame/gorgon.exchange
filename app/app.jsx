@@ -1,5 +1,8 @@
 'use strict';
 
+var Party = require('./party')
+  , React = require('react/addons');
+
 var Application = React.createClass({
   mixins: [React.addons.PureRenderMixin],
 
@@ -30,7 +33,7 @@ var Application = React.createClass({
   },
 
   /**
-   * Kill the primus update as we're no longer attached to the DOM.
+   * Kill the Primus update as we're no longer attached to the DOM.
    *
    * @api private
    */
@@ -49,17 +52,11 @@ var Application = React.createClass({
    */
   render: function render() {
     return (
-      <ul>
-      {this.state.gee.map(function (row) {
-        return (
-          <li>
-            <a href={row.url}>
-            <strong>[{row.platform}] {row.title}</strong>
-            </a>
-          </li>
-        )
+      <div className="gorgon">
+      {this.state.gee.map(function map(row) {
+        return <Party {...row} />
       })}
-      </ul>
+      </div>
     );
   }
 });

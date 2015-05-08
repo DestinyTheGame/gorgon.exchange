@@ -1,6 +1,6 @@
 'use strict';
 
-var config = require('./config.js')
+var config = require('./config')
   , Gorgon = require('./gorgon')
   , express = require('express')
   , Primus = require('primus')
@@ -15,6 +15,7 @@ var app = express()
 app.set('views', './app');
 app.set('view engine', 'ejs');
 app.use(require('serve-static')('app'));
+app.use(require('serve-static')('dist'));
 
 /**
  * Handle in the incoming API requests.
@@ -65,7 +66,10 @@ app.get('/gee/:flair', function api(req, res) {
  * @api private
  */
 app.get('/', function index(req, res) {
-  res.render('index', { gee: gee.data });
+  res.render('index', {
+    env: process.env.NODE_ENV === 'production' ? 'min' : 'dev',
+    gee: gee.data
+  });
 });
 
 //
