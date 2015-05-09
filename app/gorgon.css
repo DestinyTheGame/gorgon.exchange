@@ -1,0 +1,14 @@
+.box { display: block; padding: 10px; margin-bottom: 10px }
+  .box:before { transform: rotate(-90deg); display: inline-block; margin-left: -40px; color: #FFF; margin-right: 15px }
+
+  .Xbox-One { border-left: 30px solid #2CAD4D }
+    .Xbox-One:before { content: 'XB1' }
+
+  .Xbox-360 { border-left: 30px solid #D1D4D6 }
+    .Xbox-360:before { content: '360' }
+
+  .PS3 { border-left: 30px solid #000000 }
+    .PS3:before { content: 'PS3' }
+
+  .PS4 { border-left: 30px solid #3889BC }
+    .PS4:before { content: 'PS4' }
