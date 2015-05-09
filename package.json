@@ -24,6 +24,7 @@
     "eventemitter3": "1.0.x",
     "expirable": "0.1.x",
     "express": "4.12.x",
+    "object-assign": "2.0.x",
     "one-time": "0.0.x",
     "primus": "3.0.x",
     "primus-emit": "0.1.x",
