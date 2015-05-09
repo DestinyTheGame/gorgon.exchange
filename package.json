@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node index.js",
     "compile": "mkdir -p dist && NODE_ENV=production browserify -g envify -g reactify app/app.jsx -o dist/gorgon.dev.js",
-    "dev": "mkdir -p dist && NODE_ENV=development browserify -g envify -g reactify app/app.jsx -o dist/gorgon.dev.js"
+    "dev": "mkdir -p dist && NODE_ENV=development browserify -g envify -g reactify app/app.jsx -o dist/gorgon.dev.js",
+    "production": "NODE_ENV=production forever start index.js",
+    "restart": "NODE_ENV=production forever restart 0"
   },
   "keywords": [
     "gorgon",
@@ -34,6 +36,7 @@
     "envify": "3.4.0",
     "react": "0.13.2",
     "reactify": "1.1.0",
-    "uglifyify": "3.0.1"
+    "uglifyify": "3.0.1",
+    "forever": "*"
   }
 }
