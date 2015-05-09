@@ -1,6 +1,7 @@
 'use strict';
 
-var config = require('./config')
+var assign = require('object-assign')
+  , config = require('./config')
   , Gorgon = require('./gorgon')
   , express = require('express')
   , Primus = require('primus')
@@ -66,10 +67,14 @@ app.get('/gee/:flair', function api(req, res) {
  * @api private
  */
 app.get('/', function index(req, res) {
-  res.render('index', {
+  if (!gee.data.length) return gee.once('data', function defer() {
+    index(req, res);
+  });
+
+  res.render('index', assign({
     env: process.env.NODE_ENV === 'production' ? 'min' : 'dev',
     gee: gee.data
-  });
+  }, config));
 });
 
 //
