@@ -14,7 +14,7 @@ var Application = React.createClass({
    */
   getInitialState: function getInitialState() {
     return {
-      gee: JSON.parse(document.getElementById('gee').innerHTML)
+      gee: this.parse(JSON.parse(document.getElementById('gee').innerHTML))
     };
   },
 
@@ -28,7 +28,23 @@ var Application = React.createClass({
       , app = this;
 
     primus.on('gee', function gee(rows) {
-      app.setState({ gee: rows });
+      app.setState({ gee: app.parse(rows) });
+    });
+  },
+
+  /**
+   * Parse the returned results so we can get proper JS properties.
+   *
+   * @param {Array} gee Exchange Data
+   * @returns {Array}
+   * @api private
+   */
+  parse: function parse(gee) {
+    return gee.map(function map(row) {
+      row.modified = new Date(row.created);
+      row.created = new Date(row.created);
+
+      return row;
     });
   },
 
