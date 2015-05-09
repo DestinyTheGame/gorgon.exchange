@@ -28,6 +28,7 @@
     "one-time": "0.0.x",
     "primus": "3.0.x",
     "primus-emit": "0.1.x",
+    "react-timeago": "2.0.x",
     "serve-static": "1.9.x",
     "snoocore": "3.0.x",
     "ws": "0.7.x"

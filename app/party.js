@@ -1,6 +1,7 @@
 'use strict';
 
-var React = require('react/addons');
+var React = require('react/addons')
+  , Ago = require('react-timeago');
 
 /**
  * Render a gorgon party listing.
@@ -15,6 +16,7 @@ module.exports = React.createClass({
         <a href={this.props.url}>
           {this.props.title}
         </a>
+        <Ago date={this.props.modified} />
       </div>
     );
   }
