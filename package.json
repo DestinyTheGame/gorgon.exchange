@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "compile": "mkdir -p dist && NODE_ENV=production browserify -g envify -g reactify app/app.jsx -o dist/gorgon.dev.js",
-    "css": "stylus app/gorgon.styl",
+    "css": "lessc app/gorgon.less > app/gorgon.css",
     "dev": "mkdir -p dist && NODE_ENV=development browserify -g envify -g reactify app/app.jsx -o dist/gorgon.dev.js",
     "production": "NODE_ENV=production forever start index.js",
     "restart": "NODE_ENV=production forever restart 0"
@@ -40,9 +40,9 @@
     "browserify": "10.1.x",
     "envify": "3.4.x",
     "forever": "*",
+    "less": "2.5.0",
     "react": "0.13.x",
     "reactify": "1.1.x",
-    "stylus": "0.51.x",
     "uglifyify": "3.0.x"
   }
 }
