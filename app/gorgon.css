@@ -1,7 +1,16 @@
+body {
+  background: #132635;
+}
+.container h1 {
+  font-weight: normal;
+  color: #ffe129;
+}
 .box {
   display: block;
   margin-bottom: 10px;
   padding: 10px;
+  border: 1px solid #61a7c6;
+  background: #0b4d57;
 }
 .box:before {
   color: #fff;
@@ -10,27 +19,27 @@
   margin-right: 15px;
   transform: rotate(-90deg);
 }
-.box .Xbox-One {
+.box.Xbox-One {
   border-left: 30px solid #2cad4d;
 }
-.box .Xbox-One:before {
+.box.Xbox-One:before {
   content: 'XB1';
 }
-.box .Xbox-360 {
+.box.Xbox-360 {
   border-left: 30px solid #d1d4d6;
 }
-.box .Xbox-360:before {
+.box.Xbox-360:before {
   content: '360';
 }
-.box .PS3 {
+.box.PS3 {
   border-left: 30px solid #000;
 }
-.box .PS3:before {
+.box.PS3:before {
   content: 'PS3';
 }
-.box .PS4 {
+.box.PS4 {
   border-left: 30px solid #3889bc;
 }
-.box .PS4:before {
+.box.PS4:before {
   content: 'PS4';
 }

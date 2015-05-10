@@ -1,7 +1,17 @@
+body
+  background: #132635
+
+.container
+  h1
+    font-weight: normal
+    color: #FFE129
+
 .box
   display: block
   margin-bottom: 10px
   padding: 10px
+  border: 1px solid #61A7C6
+  background: #0b4d57
 
   &:before
     color: #FFF
@@ -10,25 +20,25 @@
     margin-right: 15px
     transform: rotate(-90deg)
 
-  .Xbox-One
+  &.Xbox-One
     border-left: 30px solid #2CAD4D
 
     &:before
       content: 'XB1'
 
-  .Xbox-360
+  &.Xbox-360
     border-left: 30px solid #D1D4D6
 
     &:before
       content: '360'
 
-  .PS3
+  &.PS3
     border-left: 30px solid #000000
 
     &:before
       content: 'PS3'
 
-  .PS4
+  &.PS4
     border-left: 30px solid #3889BC
 
     &:before

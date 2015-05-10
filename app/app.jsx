@@ -1,8 +1,18 @@
 'use strict';
 
-var Party = require('./party')
-  , React = require('react/addons');
+var React = require('react/addons')
+  , Listing = require('./listing');
 
+//
+// Needed for oneTouchTap, can be removed later.
+//
+require('react-tap-event-plugin')();
+
+/**
+ *
+ * @constructor
+ * @api private
+ */
 var Application = React.createClass({
   mixins: [React.addons.PureRenderMixin],
 
@@ -61,18 +71,14 @@ var Application = React.createClass({
   },
 
   /**
-   * Render the UI
+   * Render the UI.
    *
    * @returns {React.DOM}
    * @api private
    */
   render: function render() {
     return (
-      <div className="gorgon">
-      {this.state.gee.map(function map(row) {
-        return <Party {...row} />
-      })}
-      </div>
+      <Listing {...this.state.gee} />
     );
   }
 });
