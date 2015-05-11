@@ -3,7 +3,8 @@
 var one = require('one-time')
   , Snoocore = require('snoocore')
   , EventEmitter = require('eventemitter3')
-  , reddit = new Snoocore(require('./config'));
+  , reddit = new Snoocore(require('./config'))
+  , debug = require('diagnostics')('gorgon:exchange');
 
 /**
  * Gorgon Exchange Emitter (GEE).
@@ -108,7 +109,10 @@ Gorgon.prototype.update = function update(yay, nay) {
 
       if (Gorgon.exclude.body.some(function some(word) {
         return ~body.indexOf(word);
-      })) return false;
+      })) {
+        debug('excluding', title);
+        return false;
+      }
 
       return true;
     }).map(function normalize(row) {
@@ -121,7 +125,7 @@ Gorgon.prototype.update = function update(yay, nay) {
     gorgon.data = rows;
     yay(rows);
 
-    console.log('updating with %d rows', rows.length);
+    debug('updating with %d rows', rows.length);
   }).catch(nay);
 };
 
@@ -135,7 +139,7 @@ Gorgon.prototype.update = function update(yay, nay) {
 Gorgon.prototype.normalize = function normalize(row) {
   return {
     title: row.title.replace(/^\[[^\]]+?\]/, '').trim(),
-    created: new Date(row.created * 1000),
+    created: new Date(row.created_utc * 1000),
     modified: new Date(row.edited * 1000),
     platform: row.link_flair_text,
     author: row.author,

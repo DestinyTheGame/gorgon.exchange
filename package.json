@@ -20,6 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "connected": "0.0.x",
+    "diagnostics": "0.0.4",
     "ejs": "2.3.x",
     "emits": "3.0.x",
     "eventemitter3": "1.0.x",
