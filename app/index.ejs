@@ -6,16 +6,24 @@
   <title>Gorgon Exchange - Find shared Gorgon Checkpoint Chests for Destiny the Game from Bungie</title>
   <meta name="description" content="Find players who hold a checkpoint for the Gorgon chest in Destiny. Join their fireteam and have a chance of receiving an exotic armor or weapon!">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <link rel="stylesheet" href="/normalize.css">
   <link rel="stylesheet" href="/gorgon.css">
   <script src="/primus/primus.js"></script>
 </head>
 <body>
-  <div class="container">
-    <h1>Gorgon Exchange</h1>
+  <section class="container">
+    <div class="page-header">
+      <h1>Gorgon Exchange</h1>
+
+      <p>
+        Find Vault of Glass Gorgon Exotic chest exchange/giveaways's for
+        Destiny the Game.
+      </p>
+    </div>
 
     <div id="app"></div>
-  </div>
+  </section>
 
   <script type="text/gee" id="gee"><%- JSON.stringify(gee) %></script>
   <script src="/gorgon.<%= env %>.js"></script>
