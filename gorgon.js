@@ -69,7 +69,7 @@ Gorgon.prototype.destroy = function destroy() {
  * @private
  */
 Gorgon.exclude = {
-  title: ['lf', 'starting', 'l4', 'anyone', 'looking', 'would', 'have', 'anybody', 'lfg'],
+  title: ['lf', 'starting', 'l4', 'anyone', 'looking', 'would', 'have', 'anybody', 'lfg', 'lfm', 'crota'],
   body: ['closed', 'edit: closed', 'edit:close', 'edit : close', '**closed**', '**close**']
 };
 
@@ -87,7 +87,7 @@ Gorgon.prototype.update = function update(yay, nay) {
   nay = one(nay);   // Prevent multiple executions.
 
   reddit('/r/Fireteams/search').get({
-    q: ['title:gorgon'].concat(Gorgon.exclude.title.map(function filter(word) {
+    q: ['title:chest OR gorgon'].concat(Gorgon.exclude.title.map(function filter(word) {
       return 'title:-'+ word;
     })).join(' '),
     restrict_sr: 'on',        // Don't include an other subreddit.
