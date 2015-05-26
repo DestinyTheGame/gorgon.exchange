@@ -1,6 +1,7 @@
 'use strict';
 
 var one = require('one-time')
+  , moment = require('moment')
   , Snoocore = require('snoocore')
   , EventEmitter = require('eventemitter3')
   , reddit = new Snoocore(require('./config'));
@@ -133,14 +134,19 @@ Gorgon.prototype.update = function update(yay, nay) {
  * @api private
  */
 Gorgon.prototype.normalize = function normalize(row) {
+  var created = moment(row.created, 'X')
+    , mod = moment(row.edited, 'X')
+    , now = moment();
+
   return {
     title: row.title.replace(/^\[[^\]]+?\]/, '').trim(),
-    created: new Date(row.created * 1000),
-    modified: new Date(row.edited * 1000),
+    fresh: now.diff(created, 'hours') <= 1,
     platform: row.link_flair_text,
     author: row.author,
     text: row.selftext,
+    created: +created,
     score: row.score,
+    modified: +mod,
     _id: row.id,
     url: row.url
   };

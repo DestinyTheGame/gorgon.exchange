@@ -1,6 +1,7 @@
 'use strict';
 
 var Party = require('./party')
+  , moment = require('moment')
   , React = require('react/addons');
 
 var Application = React.createClass({
@@ -41,8 +42,12 @@ var Application = React.createClass({
    */
   parse: function parse(gee) {
     return gee.map(function map(row) {
-      row.modified = new Date(row.created);
-      row.created = new Date(row.created);
+      var created = moment(new Date(row.created));
+
+      created.local();
+      created.subtract(8, 'hours');
+
+      row.created = row.modified = created;
 
       return row;
     });
