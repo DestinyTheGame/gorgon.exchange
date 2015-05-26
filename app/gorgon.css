@@ -3,12 +3,16 @@
   margin-bottom: 10px;
   padding: 10px;
 }
+.box a:first-letter {
+  text-transform: uppercase;
+}
 .box:before {
   color: #fff;
   display: inline-block;
-  margin-left: -40px;
-  margin-right: 15px;
+  margin-left: -38px;
+  margin-right: 11px;
   transform: rotate(-90deg);
+  box-sizing: border-box;
 }
 .box.Xbox-One {
   border-left: 30px solid #2cad4d;
