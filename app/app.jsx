@@ -45,7 +45,7 @@ var Application = React.createClass({
       var created = moment(new Date(row.created));
 
       created.local();
-      created.subtract(8, 'hours');
+      created.subtract(7, 'hours');
 
       row.created = row.modified = created;
 
