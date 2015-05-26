@@ -70,7 +70,7 @@ Gorgon.prototype.destroy = function destroy() {
  * @private
  */
 Gorgon.exclude = {
-  title: ['lf', 'starting', 'l4', 'anyone', 'looking', 'would', 'have', 'anybody', 'lfg', 'lfm', 'crota', 'ether'],
+  title: ['lf', 'starting', 'l4', 'anyone', 'looking', 'would', 'have', 'anybody', 'lfg', 'lfm', 'crota', 'ether', 'farm', 'farming', 'ToO'],
   body: ['closed', 'edit: closed', 'edit:close', 'edit : close', '**closed**', '**close**']
 };
 
