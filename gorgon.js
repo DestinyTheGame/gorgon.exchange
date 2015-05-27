@@ -71,7 +71,7 @@ Gorgon.prototype.destroy = function destroy() {
  */
 Gorgon.exclude = {
   title: ['lf', 'starting', 'l4', 'anyone', 'looking', 'would', 'anybody', 'lfg', 'lfm', 'crota', 'ether', 'farm', 'farming', 'ToO', 'need'],
-  body: ['closed', 'edit: closed', 'edit:close', 'edit : close', '**closed**', '**close**', 'edit: that\'s all folks', 'edit: thats all folks', 'edit: done for tonight', 'edit: finished', 'edit: done', 'edit: no longer giving it away']
+  body: ['closed', 'edit: closed', 'edit:close', 'edit : close', '**closed**', '**close**', 'edit: that\'s all folks', 'edit: thats all folks', 'edit: done for tonight', 'edit: finished', 'edit: done', 'edit: no longer giving it away', 'edit: giveaway is closed']
 };
 
 /**
@@ -107,11 +107,11 @@ Gorgon.prototype.update = function update(yay, nay) {
         , body = row.selftext.toLowerCase();
 
       if (Gorgon.exclude.body.some(function some(word) {
-        return ~body.indexOf(word);
+        return ~body.indexOf(word) || ~row.selftext.indexOf(word);
       })) return false;
 
       if (Gorgon.exclude.title.some(function some(word) {
-        return ~title.indexOf(word);
+        return ~title.indexOf(word) || ~row.title.indexOf(word);
       })) return false;
 
       return true;
