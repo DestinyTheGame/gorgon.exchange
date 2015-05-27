@@ -16,7 +16,7 @@ module.exports = React.createClass({displayName: "exports",
       'box'
     ];
 
-    if (this.props.fresh) className.push('fresh');
+    if (!this.props.fresh) className.push('old');
 
     return (
       React.createElement("div", {className: className.join(' ')}, 

@@ -4,12 +4,8 @@
   padding: 10px;
 }
 .box.old {
-  opacity: 0.3;
   filter: grayscale(100%);
   -webkit-filter: grayscale(100%);
-}
-.box.old:hover {
-  opacity: 1;
 }
 .box a:first-letter {
   text-transform: uppercase;
