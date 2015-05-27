@@ -10,9 +10,16 @@ var React = require('react/addons');
  */
 module.exports = React.createClass({
   render: function render() {
+    var className = [
+      this.props.platform.replace(' ', '-'),
+      'box'
+    ];
+
+    if (this.props.fresh) className.push('fresh');
+
     return (
-      <div className={'box '+ this.props.platform.replace(' ', '-') + (this.props.fresh ? '' : ' old')}>
-        <a href={this.props.url}>
+      <div className={className.join(' ')}>
+        <a href={this.props.url} target="_blank">
           {this.props.title}
         </a>
         <div title={this.props.created.calendar()}>

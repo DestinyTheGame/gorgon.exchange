@@ -11,9 +11,16 @@ var React = require('react/addons');
  */
 module.exports = React.createClass({displayName: "exports",
   render: function render() {
+    var className = [
+      this.props.platform.replace(' ', '-'),
+      'box'
+    ];
+
+    if (this.props.fresh) className.push('fresh');
+
     return (
-      React.createElement("div", {className: 'box '+ this.props.platform.replace(' ', '-') + (this.props.fresh ? '' : ' old')}, 
-        React.createElement("a", {href: this.props.url}, 
+      React.createElement("div", {className: className.join(' ')}, 
+        React.createElement("a", {href: this.props.url, target: "_blank"}, 
           this.props.title
         ), 
         React.createElement("div", {title: this.props.created.calendar()}, 
