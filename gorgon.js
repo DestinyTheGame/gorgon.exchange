@@ -70,8 +70,8 @@ Gorgon.prototype.destroy = function destroy() {
  * @private
  */
 Gorgon.exclude = {
-  title: ['lf', 'starting', 'l4', 'anyone', 'looking', 'would', 'have', 'anybody', 'lfg', 'lfm', 'crota', 'ether', 'farm', 'farming', 'ToO', 'need'],
-  body: ['closed', 'edit: closed', 'edit:close', 'edit : close', '**closed**', '**close**', 'edit: that\'s all folks', 'edit: thats all folks', 'edit: done for tonight', 'edit: finished']
+  title: ['lf', 'starting', 'l4', 'anyone', 'looking', 'would', 'anybody', 'lfg', 'lfm', 'crota', 'ether', 'farm', 'farming', 'ToO', 'need'],
+  body: ['closed', 'edit: closed', 'edit:close', 'edit : close', '**closed**', '**close**', 'edit: that\'s all folks', 'edit: thats all folks', 'edit: done for tonight', 'edit: finished', 'edit: done', 'edit: no longer giving it away']
 };
 
 /**
@@ -82,15 +82,14 @@ Gorgon.exclude = {
  * @api private
  */
 Gorgon.prototype.update = function update(yay, nay) {
-  var gorgon = this;
+  var gorgon = this
+    , query;
 
   yay = one(yay);   // Prevent multiple executions.
   nay = one(nay);   // Prevent multiple executions.
 
   reddit('/r/Fireteams/search').get({
-    q: ['title:chest OR gorgon'].concat(Gorgon.exclude.title.map(function filter(word) {
-      return 'title:-'+ word;
-    })).join(' '),
+    q: 'title:chest OR gorgon',
     restrict_sr: 'on',        // Don't include an other subreddit.
     t: 'week',                // Only include up and until last week.
     sort: 'new',              // Make sure that newest arrive first.
@@ -109,6 +108,10 @@ Gorgon.prototype.update = function update(yay, nay) {
 
       if (Gorgon.exclude.body.some(function some(word) {
         return ~body.indexOf(word);
+      })) return false;
+
+      if (Gorgon.exclude.title.some(function some(word) {
+        return ~title.indexOf(word);
       })) return false;
 
       return true;
