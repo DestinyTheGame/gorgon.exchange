@@ -140,7 +140,7 @@ Gorgon.prototype.normalize = function normalize(row) {
 
   return {
     title: row.title.replace(/^\[[^\]]+?\]/, '').trim(),
-    fresh: now.diff(created, 'hours') <= 1,
+    fresh: now.diff(created, 'hours') <= 2,
     platform: row.link_flair_text,
     author: row.author,
     text: row.selftext,
