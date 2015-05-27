@@ -11,7 +11,7 @@ var React = require('react/addons');
 module.exports = React.createClass({
   render: function render() {
     return (
-      <div className={'box '+ this.props.platform.replace(' ', '-')}>
+      <div className={'box '+ this.props.platform.replace(' ', '-') + (this.props.fresh ? '' : ' old')}>
         <a href={this.props.url}>
           {this.props.title}
         </a>

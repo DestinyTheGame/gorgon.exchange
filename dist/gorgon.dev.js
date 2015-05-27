@@ -12,7 +12,7 @@ var React = require('react/addons');
 module.exports = React.createClass({displayName: "exports",
   render: function render() {
     return (
-      React.createElement("div", {className: 'box '+ this.props.platform.replace(' ', '-')}, 
+      React.createElement("div", {className: 'box '+ this.props.platform.replace(' ', '-') + (this.props.fresh ? '' : ' old')}, 
         React.createElement("a", {href: this.props.url}, 
           this.props.title
         ), 
