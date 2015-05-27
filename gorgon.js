@@ -71,7 +71,7 @@ Gorgon.prototype.destroy = function destroy() {
  */
 Gorgon.exclude = {
   title: ['lf', 'starting', 'l4', 'anyone', 'looking', 'would', 'have', 'anybody', 'lfg', 'lfm', 'crota', 'ether', 'farm', 'farming', 'ToO', 'need'],
-  body: ['closed', 'edit: closed', 'edit:close', 'edit : close', '**closed**', '**close**']
+  body: ['closed', 'edit: closed', 'edit:close', 'edit : close', '**closed**', '**close**', 'edit: that\'s all folks', 'edit: thats all folks', 'edit: done for tonight']
 };
 
 /**
