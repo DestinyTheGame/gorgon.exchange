@@ -2,6 +2,8 @@
 
 var Party = require('./party')
   , moment = require('moment')
+  , Empty = require('./empty')
+  , Filters = require('./filters')
   , React = require('react/addons');
 
 var Application = React.createClass({
@@ -15,7 +17,8 @@ var Application = React.createClass({
    */
   getInitialState: function getInitialState() {
     return {
-      gee: this.parse(JSON.parse(document.getElementById('gee').innerHTML))
+      gee: this.parse(JSON.parse(document.getElementById('gee').innerHTML)),
+      platform: 'all'
     };
   },
 
@@ -54,6 +57,16 @@ var Application = React.createClass({
   },
 
   /**
+   * Apply a filter on the dataset.
+   *
+   * @param {String} platform name of the platform we should filter upon.
+   * @api private
+   */
+  filter: function filter(platform) {
+    this.setState({ platform: platform || 'all' });
+  },
+
+  /**
    * Kill the Primus update as we're no longer attached to the DOM.
    *
    * @api private
@@ -72,17 +85,27 @@ var Application = React.createClass({
    * @api private
    */
   render: function render() {
+    var rows = this.state.gee.filter(function filter(row) {
+      if (this.state.platform === 'all') return true;
+
+      return row.platform === this.state.platform;
+    }, this).map(function map(row) {
+      return <Party {...row} />
+    });
+
+    var view = rows.length ? rows : <Empty />;
+
     return (
       <div className="gorgon">
-      {this.state.gee.map(function map(row) {
-        return <Party {...row} />
-      })}
+        <Filters filter={this.filter} />
+
+        {view}
       </div>
     );
   }
 });
 
 //
-// Render the applicaiton now that all the things are donw.
+// Render the application now that all the things are down.
 //
 React.render(<Application />, document.getElementById('app'));

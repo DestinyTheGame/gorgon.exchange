@@ -1,3 +1,28 @@
+.filter {
+  padding-bottom: 40px;
+}
+.filter h2 {
+  font-size: 12px;
+  font-weight: 700;
+  color: #959595;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.filter button {
+  font-weight: 600;
+}
+.filter button.XB1 {
+  color: #2cad4d;
+}
+.filter button.XB360 {
+  color: #d1d4d6;
+}
+.filter button.PS3 {
+  color: #000;
+}
+.filter button.PS4 {
+  color: #3889bc;
+}
 .box {
   display: block;
   margin-bottom: 10px;
