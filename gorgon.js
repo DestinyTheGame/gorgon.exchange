@@ -138,12 +138,16 @@ Gorgon.prototype.update = function update(yay, nay) {
  */
 Gorgon.prototype.normalize = function normalize(row) {
   var created = moment(row.created, 'X')
+    , fresh = moment(row.created, 'X')
     , mod = moment(row.edited, 'X')
     , now = moment();
 
+  fresh.local();
+  fresh.subtract(8, 'hours');
+
   return {
     title: row.title.replace(/^\[[^\]]+?\]/, '').trim(),
-    fresh: now.diff(created, 'hours') <= 2,
+    fresh: now.diff(fresh, 'hours') <= 4,
     platform: row.link_flair_text,
     author: row.author,
     text: row.selftext,
