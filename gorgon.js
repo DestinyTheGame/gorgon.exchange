@@ -1,10 +1,13 @@
 'use strict';
 
-var one = require('one-time')
+var async = require('async')
+  , one = require('one-time')
   , moment = require('moment')
+  , request = require('request')
   , Snoocore = require('snoocore')
   , EventEmitter = require('eventemitter3')
-  , reddit = new Snoocore(require('./config'));
+  , reddit = new Snoocore(require('./config'))
+  , debug = require('diagnostics')('gorgon:exchange');
 
 /**
  * Gorgon Exchange Emitter (GEE).
@@ -60,7 +63,6 @@ Gorgon.prototype.destroy = function destroy() {
 };
 
 /**
- *
  * Exclude words that are included in posts that people use when they are
  * SEARCHING for the chest instead of actually hosting it.
  *
@@ -70,8 +72,104 @@ Gorgon.prototype.destroy = function destroy() {
  * @private
  */
 Gorgon.exclude = {
-  title: ['lf', 'starting', 'l4', 'anyone', 'looking', 'would', 'anybody', 'lfg', 'lfm', 'crota', 'ether', 'farm', 'farming', 'ToO', 'need'],
+  title: ['lf', 'starting', 'l4', 'anyone', 'looking', 'would', 'anybody', 'lfg', 'lfm', 'crota', 'ether', 'farm', 'farming', 'ToO', 'need', 'chest plate', 'lookin for'],
   body: ['closed', 'edit: closed', 'edit:close', 'edit : close', '**closed**', '**close**', 'edit: that\'s all folks', 'edit: thats all folks', 'edit: done for tonight', 'edit: finished', 'edit: done', 'edit: no longer giving it away', 'edit: giveaway is closed', 'edit : done']
+};
+
+/**
+ * The posts are required to included at least one of these words in order to be
+ * considered suitable for this exchange.
+ *
+ * @type {Object}
+ * @api private
+ */
+Gorgon.include = {
+  title: ['chest', 'gorgon']
+};
+
+/**
+ * Update information from various of endpoints.
+ *
+ * @param {Function} yay Completion callback.
+ * @param {Function} nay Error callback.
+ * @api private
+ */
+Gorgon.prototype.update = function update(yay, nay) {
+  var gorgon = this;
+
+  debug('updating our internal gorgon cache');
+
+  async.reduce([
+    'reddit',
+    'destinylfg'
+  ], [], function process(memo, service, next) {
+    debug('attempting to receive information from %s', service);
+
+    gorgon[service](function yay(rows) {
+      Array.prototype.push.apply(memo, rows);
+      next(undefined, memo);
+    }, next);
+  }, function completion(err, rows) {
+    if (err) return nay(err);
+
+    debug('received %d potential events', rows.length);
+    gorgon.data = rows.sort(function sort(a, b) {
+      return b.created - a.created;
+    });
+
+    yay(gorgon.data);
+  });
+};
+
+/**
+ * Search the destinylfg.com site for Gorgon chest giveaway.
+ *
+ * @param {Function} yay Completion callback.
+ * @param {Function} nay Error callback.
+ * @api private
+ */
+Gorgon.prototype.destinylfg = function destinylfg(yay, nay) {
+  var gorgon = this;
+
+  yay = one(yay);   // Prevent multiple executions.
+  nay = one(nay);   // Prevent multiple executions.
+
+  request({
+    url: 'https://www.destinylfg.net/groups.json',
+    method: 'GET',
+    json: true
+  }, function lfgd(err, res, rows) {
+    if (err || !rows.length || !Array.isArray(rows)) {
+      return nay(err || new Error('no fresh data received from lfg'));
+    }
+
+    rows = rows.filter(function filter(row) {
+      var notes = (row.notes || '').toLowerCase().trim();
+
+      if (!~row.event.indexOf('vaultofglass') || !notes.length) {
+        return false;
+      }
+
+      if (!Gorgon.include.title.some(function some(word) {
+        return ~notes.indexOf(word);
+      })) return false;
+
+      if (Gorgon.exclude.body.some(function some(word) {
+        return ~notes.indexOf(word) || ~row.notes.indexOf(word);
+      })) return false;
+
+      if (Gorgon.exclude.title.some(function some(word) {
+        return ~notes.indexOf(word) || ~row.notes.indexOf(word);
+      })) return false;
+
+      return true;
+    }).map(function normalize(row) {
+      return gorgon.normalize.destinylfg(row);
+    });
+
+    debug('received %d rows from destinylfg', rows.length);
+    yay(rows);
+  });
 };
 
 /**
@@ -81,22 +179,21 @@ Gorgon.exclude = {
  * @param {Function} nay Error callback.
  * @api private
  */
-Gorgon.prototype.update = function update(yay, nay) {
-  var gorgon = this
-    , query;
+Gorgon.prototype.reddit = function redditapi(yay, nay) {
+  var gorgon = this;
 
   yay = one(yay);   // Prevent multiple executions.
   nay = one(nay);   // Prevent multiple executions.
 
   reddit('/r/Fireteams/search').get({
-    q: 'title:chest OR gorgon',
+    q: 'title:'+ Gorgon.include.title.join(' OR '),
     restrict_sr: 'on',        // Don't include an other subreddit.
     t: 'week',                // Only include up and until last week.
     sort: 'new',              // Make sure that newest arrive first.
     limit: 100                // Include, all the results.
   }).then(function get(result) {
     if (!result || !result.data || !result.data.children) {
-      return nay(new Error('no fresh data received'));
+      return nay(new Error('no fresh data received from reddit'));
     }
 
     var rows = result.data.children.map(function cleanup(row) {
@@ -116,47 +213,90 @@ Gorgon.prototype.update = function update(yay, nay) {
 
       return true;
     }).map(function normalize(row) {
-      return gorgon.normalize(row);
+      return gorgon.normalize.reddit(row);
     });
 
-    //
-    // Update our internal state and call all the callbacks.
-    //
-    gorgon.data = rows;
+    debug('received %d rows from reddit', rows.length);
     yay(rows);
-
-    console.log('updating with %d rows', rows.length);
   }).catch(nay);
 };
 
 /**
- * Normalize the returned data to a clean and useful structure.
+ * Result normalization so we all share the same data structure.
  *
- * @param {Object} row The received row from the Reddit server.
- * @returns {Object} Brand spanking new, clean object.
+ * @type {Object}
  * @api private
  */
-Gorgon.prototype.normalize = function normalize(row) {
-  var created = moment(row.created, 'X')
-    , fresh = moment(row.created, 'X')
-    , mod = moment(row.edited, 'X')
-    , now = moment();
+Gorgon.prototype.normalize = {
+  /**
+   * Normalize the returned data to a clean and useful structure.
+   *
+   * @param {Object} row The received row from the Reddit server.
+   * @returns {Object} Brand spanking new, clean object.
+   * @api private
+   */
+  reddit: function normalize(row) {
+    var created = moment(row.created, 'X')
+      , now = moment();
 
-  fresh.local();
-  fresh.subtract(8, 'hours');
+    created.local();
+    created.subtract(8, 'hours');
 
-  return {
-    title: row.title.replace(/^\[[^\]]+?\]/, '').trim(),
-    fresh: now.diff(fresh, 'hours') <= 4,
-    platform: row.link_flair_text,
-    author: row.author,
-    text: row.selftext,
-    created: +created,
-    score: row.score,
-    modified: +mod,
-    _id: row.id,
-    url: row.url
-  };
+    return {
+      title: row.title.replace(/^\[[^\]]+?\]/, '').trim(),
+      fresh: now.diff(created, 'hours') <= 4,
+      platform: this.platform(row.link_flair_text),
+      author: row.author,
+      created: +created,
+      source: 'reddit',
+      _id: row.id,
+      url: row.url
+    };
+  },
+
+  /**
+   * Normalize the returned data to a clean and useful structure.
+   *
+   * @param {Object} row The received row from the Reddit server.
+   * @returns {Object} Brand spanking new, clean object.
+   * @api private
+   */
+  destinylfg: function normalize(row) {
+    return {
+      title: row.notes,
+      fresh: true,
+      platform: this.platform(row.platform),
+      author: row.gamertag,
+      created: row.time,
+      source: 'destinylfg',
+      _id: row.id
+    };
+  },
+
+  /**
+   * Attempt to normalize platforms between all supported services.
+   *
+   * @param {String} name Platform name.
+   * @returns {String} platform name
+   * @api private
+   */
+  platform: function platform(name) {
+    switch (name) {
+      case 'xbox1':
+      return 'Xbox-One';
+
+      case 'ps3':
+      return 'PS3';
+
+      case 'ps4':
+      return 'PS4';
+
+      case 'xbox360':
+      return 'Xbox-360';
+    }
+
+    return name;
+  }
 };
 
 //
