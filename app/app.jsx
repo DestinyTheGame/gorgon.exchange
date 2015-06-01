@@ -1,12 +1,20 @@
 'use strict';
 
-var Party = require('./party')
-  , moment = require('moment')
+var moment = require('moment')
   , Empty = require('./empty')
+  , Reddit = require('./reddit')
   , Notify = require('notifyjs')
   , Filters = require('./filters')
-  , React = require('react/addons');
+  , React = require('react/addons')
+  , DestinyLFG = require('./destinylfg');
 
+/**
+ * The interface for our Application which renders the listing of the Gorgon
+ * Exchange.
+ *
+ * @constructor
+ * @api public
+ */
 var Application = React.createClass({
   mixins: [React.addons.PureRenderMixin],
 
@@ -138,7 +146,9 @@ var Application = React.createClass({
 
       return row.platform === this.state.platform;
     }, this).map(function map(row) {
-      return <Party {...row} />
+      if ('reddit' === row.source) return (<Reddit {...row} />);
+
+      return (<DestinyLFG {...row} />);
     });
 
     var view = rows.length ? rows : <Empty />;
