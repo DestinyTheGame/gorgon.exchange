@@ -1,6 +1,7 @@
 'use strict';
 
-var assign = require('object-assign')
+var debug = require('diagnostics')('gorgon:web')
+  , assign = require('object-assign')
   , config = require('./config')
   , Gorgon = require('./gorgon')
   , express = require('express')
@@ -60,7 +61,7 @@ app.get('/gee/:flair', function api(req, res) {
 });
 
 /**
- * Handle requests to the index of the page.
+ * Handle requests to the index.
  *
  * @param {Request} req Incoming HTTP request.
  * @param {Response} res Outgoing HTTP request.
@@ -74,6 +75,19 @@ app.get('/', function index(req, res) {
   res.render('index', assign({
     env: process.env.NODE_ENV === 'production' ? 'min' : 'dev',
     gee: gee.data
+  }, config));
+});
+
+/**
+ * Handle requests to the about page.
+ *
+ * @param {Request} req Incoming HTTP request.
+ * @param {Response} res Outgoing HTTP request.
+ * @api private
+ */
+app.get('/about', function index(req, res) {
+  res.render('about', assign({
+    env: process.env.NODE_ENV === 'production' ? 'min' : 'dev'
   }, config));
 });
 
@@ -97,6 +111,8 @@ var gee = new Gorgon(config.interval);
 // their internal state.
 //
 gee.on('data', function update(data) {
+  debug('broadcasting to %d connected users', primus.connected);
+
   primus.forEach(function each(spark) {
     spark.emit('gee', data);
   });

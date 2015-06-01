@@ -3,11 +3,20 @@
 var Party = require('./party')
   , moment = require('moment')
   , Empty = require('./empty')
+  , Notify = require('notifyjs')
   , Filters = require('./filters')
   , React = require('react/addons');
 
 var Application = React.createClass({
   mixins: [React.addons.PureRenderMixin],
+
+  /**
+   * A simple check to see if we're allowed to send desktop notifications.
+   * 
+   * @type {Boolean}
+   * @api private
+   */
+  asked: !Notify.needsPermission,
 
   /**
    * Extract the initial state from the JSON dump that is in the index page.
@@ -45,12 +54,7 @@ var Application = React.createClass({
    */
   parse: function parse(gee) {
     return gee.map(function map(row) {
-      var created = moment(new Date(row.created));
-
-      created.local();
-      created.subtract(8, 'hours');
-
-      row.created = row.modified = created;
+      row.created = moment(new Date(row.created));
 
       return row;
     });
@@ -79,12 +83,56 @@ var Application = React.createClass({
   },
 
   /**
+   * Figure out if we should trigger a notification in the browser because we've
+   * received a new update.
+   *
+   * @param {Object} props Properties that are getting updated.
+   * @param {Object} state New state that is getting updated.
+   * @api private
+   */
+  componentWillUpdate: function componentWillUpdate(props, state) {
+    if (!state || !state.gee || !state.gee.length || !this.state.gee || !this.asked) return;
+
+    var first = state.gee[0]
+      , notification
+      , matches;
+    
+    //
+    // This is a really naive implementation as it assumes that new events will
+    // be added as first item in the new state. And that it's given id is not in
+    // the current set of data.
+    //
+    if (this.state.gee.some(function some(row) {
+      return row._id === first._id;
+    })) return;
+
+    notification = new Notify('New Gorgon exchange for '+ first.platform, {
+      body: first.title,
+      timeout: 5
+    });
+
+    notification.show();
+  },
+
+  /**
+   * Ask for permissions to display notifications.
+   *
+   * @api private
+   */
+  ask: function ask() {
+    this.asked = true;
+    Notify.requestPermission();
+  },
+
+  /**
    * Render the UI
    *
    * @returns {React.DOM}
    * @api private
    */
   render: function render() {
+    if (!this.asked) this.ask();
+
     var rows = this.state.gee.filter(function filter(row) {
       if (this.state.platform === 'all') return true;
 
