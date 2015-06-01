@@ -269,7 +269,8 @@ Gorgon.prototype.normalize = {
       author: row.gamertag,
       created: row.time,
       source: 'destinylfg',
-      _id: row.id
+      _id: row.id,
+      url: row.link
     };
   },
 

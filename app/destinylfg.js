@@ -10,20 +10,15 @@ var React = require('react/addons');
  */
 module.exports = React.createClass({
   render: function render() {
-    var className = [
-      this.props.platform.replace(' ', '-'),
-      'box'
-    ];
+    var className = [ this.props.platform.replace(' ', '-'), 'box' ];
 
     if (!this.props.fresh) className.push('old');
 
     return (
       <div className={className.join(' ')}>
-        <a href={this.props.url} target="_blank">
-          {this.props.title}
-        </a>
+        {this.props.title}
         <div title={this.props.created.calendar()}>
-          {this.props.created.fromNow()}
+          {this.props.created.fromNow()}, username: <strong>{this.props.author}</strong>
         </div>
       </div>
     );
