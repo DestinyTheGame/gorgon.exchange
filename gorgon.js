@@ -73,7 +73,7 @@ Gorgon.prototype.destroy = function destroy() {
  */
 Gorgon.exclude = {
   title: ['lf', 'starting', 'l4', 'anyone', 'looking', 'would', 'anybody', 'lfg', 'lfm', 'crota', 'ether', 'farm', 'farming', 'ToO', 'need', 'chest plate', 'lookin for'],
-  body: ['closed', 'edit: closed', 'edit:close', 'edit : close', '**closed**', '**close**', 'edit: that\'s all folks', 'edit: thats all folks', 'edit: done for tonight', 'edit: finished', 'edit: done', 'edit: no longer giving it away', 'edit: giveaway is closed', 'edit : done']
+  body: ['closed', 'edit: closed', 'edit:close', 'edit : close', '**closed**', '**close**', 'edit: that\'s all folks', 'edit: thats all folks', 'edit: done for tonight', 'edit: finished', 'edit: done', 'edit: no longer giving it away', 'edit: giveaway is closed', 'edit : done', 'hook me up with']
 };
 
 /**
