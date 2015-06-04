@@ -113,8 +113,26 @@ Gorgon.prototype.update = function update(yay, nay) {
     if (err) return nay(err);
 
     debug('received %d potential events', rows.length);
+
+    //
+    // Now that everything is sorted and normalized we want to make sure that we
+    // remove out of date duplicate posts from authors. It's quite common that
+    // authors will re-post their exchange in order to get more visibility on
+    // boards. This unfortunately leads to UI clutter and confusing listings. In
+    // order to fix this we're going to remove their oldest posts.
+    //
     gorgon.data = rows.sort(function sort(a, b) {
       return b.created - a.created;
+    }).filter(function filter(row, current, all) {
+      for (var i = 0; i < current; i++) {
+        if (all[i].author === row.author && row.source === all[i].source) {
+          debug('removing `%s` as author `%s` made newer post', row.title, row.author);
+
+          return false;
+        }
+      }
+
+      return true;
     });
 
     yay(gorgon.data);
