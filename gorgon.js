@@ -263,7 +263,7 @@ Gorgon.prototype.normalize = {
     return {
       title: row.title.replace(/^\[[^\]]+?\]/, '').trim(),
       fresh: now.diff(created, 'hours') <= 4,
-      platform: this.platform(row.link_flair_text),
+      platform: this.platform(row.link_flair_text || row.title),
       author: row.author,
       created: +created,
       source: 'reddit',
@@ -300,6 +300,12 @@ Gorgon.prototype.normalize = {
    * @api private
    */
   platform: function platform(name) {
+    name = (name || '').toString();
+
+    if (name.charAt(0) === '[' && ~name.indexOf(']')) {
+      name = /^\[([^\]]+?)\]/.exec(name)[1];
+    }
+
     switch (name) {
       case 'xbox1':
       return 'Xbox-One';
