@@ -82,7 +82,7 @@ Gorgon.exclude = {
     '**close**', 'edit: that\'s all folks', 'edit: thats all folks',
     'edit: done for tonight', 'edit: finished', 'edit: done',
     'edit: no longer giving it away', 'edit: giveaway is closed', 'edit : done',
-    'hook me up with', 'does anyone have a', 'status: ended'
+    'hook me up with', 'does anyone have a', 'status: ended', 'edit: all done'
   ]
 };
 
