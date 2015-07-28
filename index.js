@@ -9,6 +9,13 @@ var debug = require('diagnostics')('gorgon:web')
   , http = require('http');
 
 //
+// Crash protection
+//
+process.on('uncaughtException', function (err) {
+  console.error('uncaughtException', err);
+});
+
+//
 // Setup the HTTP server.
 //
 var app = express()
