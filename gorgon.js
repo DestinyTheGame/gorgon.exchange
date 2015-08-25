@@ -110,8 +110,7 @@ Gorgon.prototype.update = function update(yay, nay) {
   debug('updating our internal gorgon cache');
 
   async.reduce([
-    'reddit',
-    'destinylfg'
+    'reddit'
   ], [], function process(memo, service, next) {
     debug('attempting to receive information from %s', service);
 
