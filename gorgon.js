@@ -17,6 +17,7 @@ var async = require('async')
  * @api private
  */
 function Gorgon(interval) {
+  this.readState = 'loading';
   this.interval = interval;
   this.timer = null;
   this.data = [];
@@ -45,6 +46,10 @@ Gorgon.prototype.initialize = function initialize() {
   gorgon.timer = setInterval(function interval() {
     gorgon.update(gorgon.emits('data'), gorgon.emits('error'));
   }, gorgon.interval);
+
+  gorgon.once('data', function readyState() {
+    gorgon.readyState = 'loaded';
+  });
 };
 
 /**

@@ -75,7 +75,7 @@ app.get('/gee/:flair', function api(req, res) {
  * @api private
  */
 app.get('/', function index(req, res) {
-  if (!gee.data.length) return gee.once('data', function defer() {
+  if (gee.readyState !== 'loaded') return gee.once('data', function defer() {
     index(req, res);
   });
 
