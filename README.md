@@ -1,3 +1,8 @@
+```
+Please note that this project and the site has now been deprecated. The code is only 
+here for historical purposes and might not work on new environments.
+```
+
 # gorgon.exchange
 
 The source code for the `http://gorgon.exchange` URL. 
