@@ -31,7 +31,7 @@
     "notifyjs": "2.0.3",
     "object-assign": "~4.1.0",
     "one-time": "0.0.x",
-    "primus": "~6.0.7",
+    "primus": "~6.0.9",
     "primus-emit": "~1.0.0",
     "request": "~2.79.0",
     "serve-static": "~1.11.1",
