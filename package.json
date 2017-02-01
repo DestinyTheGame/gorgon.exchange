@@ -36,7 +36,7 @@
     "request": "~2.79.0",
     "serve-static": "~1.11.1",
     "snoocore": "~3.3.1",
-    "ws": "~1.1.1"
+    "ws": "~2.0.1"
   },
   "devDependencies": {
     "browserify": "~13.2.0",
