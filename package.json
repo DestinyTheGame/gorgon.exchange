@@ -22,7 +22,7 @@
     "async": "~2.1.4",
     "connected": "0.0.x",
     "diagnostics": "~1.1.0",
-    "ejs": "~2.5.5",
+    "ejs": "~2.5.6",
     "emits": "3.0.x",
     "eventemitter3": "~2.0.2",
     "expirable": "0.1.x",
